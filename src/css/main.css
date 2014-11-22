@@ -1,0 +1,12 @@
+
+body {
+  padding-bottom: 10px;
+}
+
+.google-map {
+  min-height: 400px;
+  height: 100%;
+  -webkit-box-sizing: content-box;
+     -moz-box-sizing: content-box;
+          box-sizing: content-box;
+}

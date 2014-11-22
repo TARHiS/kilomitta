@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!-- vi: et sw=2 fileencoding=utf8
+-->
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="format-detection" content="telephone=no" />
+  <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/main.css" />
+  <title>Index</title>
+</head>
+<body>
+<!-- dialog-login -->
+<div class="modal fade" id="dialog-login" tabindex="-1" role="dialog" aria-labelledby="dialog-login-label" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title" id="dialog-login-label">Kirjaudu google-tunnuksilla</h4>
+    </div>
+    <div class="modal-body">
+      <div class="form-groug">
+        <label>Käyttäjätunnus</label>
+        <input type="text" id="dialog-login-username" class="form-control">
+      </div>
+<br>
+      <div class="form-group">
+        <label>Salasana:</label>
+        <input type="password" id="dialog-login-password" class="form-control">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Peru</button>
+      <button type="button" class="btn btn-primary" data-loading-text="Tarkistetaan..." id="dialog-login-btn-login">Kirjaudu</button>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<div class="container">
+<h3>Kilomitta <span id="username-label" class="pull-right"></span></h3>
+<hr/>
+<button id="btn-matka" class="btn btn-block btn-primary"><br>Uusi matka<br>&nbsp;</button>
+<button id="btn-matkat" class="btn btn-block btn-default"><br>Matkat<br>&nbsp;</button>
+<button id="btn-asetukset" class="btn btn-block btn-default"><br>Asetukset<br>&nbsp;</button>
+<button id="btn-login" class="btn btn-block btn-default"><br>Kirjaudu</br>&nbsp;</button>
+
+</div>
+<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="js/jquery.storageapi.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+</body>
+</html>
