@@ -16,9 +16,22 @@
 <body>
 
 <div class="container">
-<div class="row">
-<div class="col-xs-12">
 
+<div class="row">
+<div class="col-xs-6">
+<div class="form-group">
+  <label for="input-kilometri-start" class="h3">Kilometrilukema alussa</label>
+  <input type="number" class="form-control" id="input-kilometri-start" placeholder="Syötä kilometrilukema">
+</div>
+</div>
+
+<div class="col-xs-6">
+<div class="form-group">
+  <label for="input-kilometri-end" class="h3">Kilometrilukema lopussa</label>
+  <input type="number" class="form-control" id="input-kilometri-end" placeholder="Syötä kilometrilukema">
+</div>
+</div>
+</div>
 
 <div class="row">
   <div class="google-map"></div>
@@ -39,10 +52,12 @@
     </ul>
     </div>
   </div>
+  <div class="col-xs-9">
+    <p class="lead">Aloitusaika: <span id="span-aloitusaika"></span></p>
+    <p class="lead">Sijainti nyt: <span id="span-sijainti"></span></p>
+  </div>
 </div>
 
-</div>
-</div>
 </div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>

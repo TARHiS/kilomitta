@@ -14,11 +14,21 @@ if (storage.isSet("showMap")) {
 
 var matka = storage.get("matka");
 
+$("#span-aloitusaika").text(moment(matka.aloitusaika).format("DD.MM.YYYY HH:mm"));
+
 updateLocation = function(p) {
   if (p == null) {
     return;
   }
 
+  $("#span-sijainti").text(
+    "lat: " + p.coords.latitude +
+    ", lng: " + p.coords.longitude
+  );
+
+  if (!google) {
+    return;
+  }
 
   var latLng = new google.maps.LatLng(
     parseFloat(p.coords.latitude),
@@ -43,13 +53,51 @@ errorLocation = function(e) {
   navigator.geolocation.clearWatch(watchPosition);
 }
 
+$("#input-kilometri-start").change(function(e) {
+  var value = $(e.target).val();
+
+  if (value != 0) {
+    matka.alkulukema = value;
+    storage.set("matka", matka);
+  }
+});
+
+$("#input-kilometri-end").change(function(e) {
+  var value = $(e.target).val();
+
+  if (value != 0) {
+    matka.loppulukema = value;
+    storage.set("matka", matka);
+  }
+});
 
 $("#btn-asetukset").click(function(){
   document.location = "asetukset.html";
 });
 
 $("#btn-matka-lopeta").click(function(){
-    document.location = "index.html";
+  if ($("#input-kilometri-start").val() == 0) {
+    alert("Syötä alkulukema");
+    return;
+  }
+
+  if ($("#input-kilometri-end").val() == 0) {
+    alert("Syötä loppulukema");
+    return;
+  }
+
+  matka.alkulukema = $("#input-kilometri-start").val();
+  matka.loppulukema = $("#input-kilometri-end").val();
+  matka.lopetusaika = new Date();
+
+  var matkat = storage.get("matkat");
+
+  console.log(matkat);
+  matkat.push(matka);
+
+  storage.set("matkat", matkat);
+  storage.remove("matka");
+  document.location = "index.html";
 });
 
 $("#btn-keskita").click(function(){
@@ -101,11 +149,15 @@ function googleMapInitialize() {
 
 }
 
-google.maps.event.addDomListener(window, 'load', googleMapInitialize);
-
 watchPosition = navigator.geolocation.watchPosition(
   updateLocation,
   errorLocation,
   {frequency: 60000,
    enableHighAccuracy: true}
 );
+
+
+if (google) {
+  google.maps.event.addDomListener(window, 'load', googleMapInitialize);
+}
+
