@@ -1,12 +1,17 @@
 // vi: et sw=2 fileencoding=utf8
 //
 
+var logged = false;
 var showMap = true;
 var gMap = null;
 var gMark = null;
 var updateLocation = null;
 var errorLocation = null;
 var watchPosition = null;
+
+if (storage.isSet("Google.username")) {
+  logged = true;
+}
 
 if (storage.isSet("showMap")) {
   showMap = storage.get("showMap");
@@ -26,7 +31,7 @@ updateLocation = function(p) {
     ", lng: " + p.coords.longitude
   );
 
-  if (!google) {
+  if (!logged) {
     return;
   }
 
@@ -75,7 +80,14 @@ $("#btn-asetukset").click(function(){
   document.location = "asetukset.html";
 });
 
-$("#btn-matka-lopeta").click(function(){
+$("#btn-lopeta-ei-tallennus").click(function(){
+  if (confirm("Oletko varma")) {
+    storage.remove("matka");
+    document.location = "index.html";
+  }
+});
+
+$("#btn-lopeta").click(function(){
   if ($("#input-kilometri-start").val() == 0) {
     alert("Syötä alkulukema");
     return;
@@ -157,7 +169,9 @@ watchPosition = navigator.geolocation.watchPosition(
 );
 
 
-if (google) {
+if (logged) {
   google.maps.event.addDomListener(window, 'load', googleMapInitialize);
+} else {
+  $(".google-map").hide();
 }
 
