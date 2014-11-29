@@ -1,7 +1,7 @@
 // vi: et sw=2 fileencoding=utf8
 //
 
-var matkat = storage.get("matkat");
+var matkat = storage.get("matkat").reverse();
 
 $.each(matkat, function(index, matka) {
   $("#matkat tbody").append(
