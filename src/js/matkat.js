@@ -6,14 +6,20 @@ var matkat = storage.get("matkat");
 $.each(matkat, function(index, matka) {
   $("#matkat tbody").append(
     $("<tr/>").append(
+      $("<td/>").html(
+        (matka.selite || "") + "<br>" +
+        (matka.tarkoitus || "")
+      )
     ).append(
-      $("<td/>").text(moment(matka.aloitusaika).format("DD.MM.YYYY HH:mm"))
+      $("<td/>").html(
+        moment(matka.aloitusaika).format("DD.MM.YYYY HH:mm") + "<br>" +
+        moment(matka.lopetusaika).format("DD.MM.YYYY HH:mm")
+      )
     ).append(
-      $("<td/>").text(moment(matka.lopetusaika).format("DD.MM.YYYY HH:mm"))
-    ).append(
-      $("<td/>").text(matka.alkulukema)
-    ).append(
-      $("<td/>").text(matka.loppulukema)
+      $("<td/>").html(
+        matka.alkulukema + "<br>" +
+        matka.loppulukema
+      )
     ).append(
       $("<td/>").text(matka.loppulukema - matka.alkulukema)
     )
