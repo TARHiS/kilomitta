@@ -82,7 +82,7 @@ $("#input-kilometri-end").change(store_int("loppulukema"));
 $("#input-kilometri-tarkoitus").change(store_string("tarkoitus"));
 $("#input-kilometri-selite").change(store_string("selite"));
 
-$("#btn-asetukset").click(function(){
+$("#btn-asetukset").click(function() {
   document.location = "asetukset.html";
 });
 
@@ -94,13 +94,18 @@ $("#btn-lopeta-ei-tallennus").click(function(){
 });
 
 $("#btn-lopeta").click(function(){
-  if ($("#input-kilometri-start").val() == 0) {
+  if (matka.alkulukema == 0) {
     alert("Syötä alkulukema");
     return;
   }
 
-  if ($("#input-kilometri-end").val() == 0) {
+  if (matka.loppulukema == 0) {
     alert("Syötä loppulukema");
+    return;
+  }
+
+  if (matka.alkulukema > matka.loppulukema) {
+    alert("Loppulukema ei voi olla isompi kuin alkulukema!");
     return;
   }
 
