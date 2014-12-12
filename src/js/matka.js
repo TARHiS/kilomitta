@@ -215,7 +215,7 @@ function googleMapInitialize() {
 watchPosition = navigator.geolocation.watchPosition(
   updateLocation,
   errorLocation,
-  {frequency: 60000,
+  {frequency: option("position-frequency"),
    enableHighAccuracy: true}
 );
 

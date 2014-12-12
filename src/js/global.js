@@ -2,6 +2,23 @@
 
 var storage = $.localStorage;
 
+var default_values = {
+  "min-movement": 100, // meter
+  "position-frequency": 60000, // ms
+}
+
+function option(name, value) {
+  if (value != undefined) {
+    storage.set(name, value);
+  }
+
+  if (storage.isSet(name)) {
+    return storage.get(name);
+  }
+
+  return default_values[name];
+}
+
 if (!Array.prototype.last) {
   Array.prototype.last = function() {
       return this[this.length - 1];
