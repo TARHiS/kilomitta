@@ -9,6 +9,18 @@ var updateLocation = null;
 var errorLocation = null;
 var watchPosition = null;
 
+function calcDistance(coords1,coords2) {
+  var R = 6371; // km
+  var dLat = (coords2.latitude - coords1.latitude).toRad();
+  var dLon = (coords2.longitude - coords1.longitude).toRad(); 
+  var a = Math.sin(dLat / 2.0) * Math.sin(dLat / 2.0) +
+          Math.cos(coords1.latitude.toRad()) * Math.cos(coords2.latitude.toRad()) * 
+          Math.sin(dLon / 2.0) * Math.sin(dLon / 2.0); 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
+  var d = R * c;
+  return d * 1000;
+}
+
 if (storage.isSet("Google.username")) {
   logged = true;
 }
@@ -28,8 +40,33 @@ updateLocation = function(p) {
 
   $("#span-sijainti").text(
     "lat: " + p.coords.latitude +
-    ", lng: " + p.coords.longitude
+    ", lng: " + p.coords.longitude +
+    ", acc: " + p.coords.accuracy
   );
+
+  var pituus = 0;
+  if (matka.positions.isEmpty()) {
+    matka.positions.push(p);
+  } else {
+    pituus = calcDistance(matka.positions.last().coords, p.coords);
+  }
+
+  // Jos etäisyys edellisestä pisteestä on alle
+  // kymmenen metriä, ei tallenneta pistettä.
+  if(pituus < 10) {
+    return;
+  }
+
+  matka.positions.push(p);
+  matka.pituus += pituus; 
+
+  // Määritetään etäisyydelle oikea yksikkö 
+  if(matka.pituus < 1000) {
+    $("#span-pituus").text(matka.pituus + "m");
+  } else {
+    $("#span-pituus").text((matka.pituus/1000) + "km");
+  }
+
 
   if (!logged) {
     return;
@@ -68,6 +105,7 @@ function store_int(field) {
     }
   }
 }
+
 function store_string(field) {
   return function (e) {
     var value = $(e.target).val();

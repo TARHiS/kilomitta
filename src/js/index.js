@@ -13,6 +13,8 @@ $("#btn-matka").click(function() {
     aloitusaika: new Date(),
     alkulukema: 0,
     loppulukema: 0,
+    positions: new Array(),
+    pituus: 0,
     selite: "",
     tarkoitus: "",
   });
