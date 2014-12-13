@@ -53,7 +53,7 @@ updateLocation = function(p) {
 
   // Jos etäisyys edellisestä pisteestä on alle
   // kymmenen metriä, ei tallenneta pistettä.
-  if(pituus < 10) {
+  if(pituus < option("min-movement")) {
     return;
   }
 
@@ -62,9 +62,9 @@ updateLocation = function(p) {
 
   // Määritetään etäisyydelle oikea yksikkö 
   if(matka.pituus < 1000) {
-    $("#span-pituus").text(matka.pituus + "m");
+    $("#span-pituus").text(Math.round(matka.pituus) + "m");
   } else {
-    $("#span-pituus").text((matka.pituus/1000) + "km");
+    $("#span-pituus").text((Math.round(matka.pituus/100)/10) + "km");
   }
 
 
@@ -147,10 +147,6 @@ $("#btn-lopeta").click(function(){
     return;
   }
 
-  //matka.selite = $("#input-kilometri-selite").val();
-  //matka.tarkoitus = $("#input-kilometri-tarkoitus").val();
-  //matka.alkulukema = $("#input-kilometri-start").val();
-  //matka.loppulukema = $("#input-kilometri-end").val();
   matka.lopetusaika = new Date();
 
   var matkat = storage.get("matkat");
