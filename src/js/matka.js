@@ -212,13 +212,14 @@ function googleMapInitialize() {
 
 }
 
-watchPosition = navigator.geolocation.watchPosition(
-  updateLocation,
-  errorLocation,
-  {frequency: option("position-frequency"),
-   enableHighAccuracy: true}
-);
-
+if (option("position-enable")) {
+  watchPosition = navigator.geolocation.watchPosition(
+    updateLocation,
+    errorLocation,
+    {frequency: option("position-frequency"),
+     enableHighAccuracy: true}
+  );
+}
 
 if (logged) {
   google.maps.event.addDomListener(window, 'load', googleMapInitialize);

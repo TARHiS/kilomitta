@@ -4,6 +4,7 @@ var storage = $.localStorage;
 
 var default_values = {
   "min-movement": 100, // meter
+  "position-enable": true,
   "position-frequency": 60000, // ms
 }
 
