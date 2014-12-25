@@ -17,10 +17,10 @@ if (storage.isSet("matkat")) {
 }
 
 $.each(matkat, function (undefined, matka) {
-  if ($.inArray(matka.tarkoitus, tarkoitukset) == -1) {
+  if (matka.tarkoitus && $.inArray(matka.tarkoitus, tarkoitukset) == -1) {
     tarkoitukset.push(matka.tarkoitus);
   }
-  if ($.inArray(matka.selite, selitteet) == -1) {
+  if (matka.selite && $.inArray(matka.selite, selitteet) == -1) {
     selitteet.push(matka.selite);
   }
 });
