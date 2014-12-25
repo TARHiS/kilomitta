@@ -47,10 +47,10 @@ $("#matkat tbody").on("click", "button.matka-edit", function (e) {
   var matka = matkat[btn.data("matka")];
 
   $("#edit-dialog-save").data("matka", btn.data("matka"));
-  $("#edit-dialog-selite").val(matka.selite);
-  $("#edit-dialog-tarkoitus").val(matka.tarkoitus);
-  $("#edit-dialog-alkulukema").val(matka.alkulukema);
-  $("#edit-dialog-loppulukema").val(matka.loppulukema);
+  $("#edit-dialog-selite").val(matka.selite || "");
+  $("#edit-dialog-tarkoitus").val(matka.tarkoitus || "");
+  $("#edit-dialog-alkulukema").val(matka.alkulukema || 0);
+  $("#edit-dialog-loppulukema").val(matka.loppulukema || 0);
   $("#edit-dialog").modal("show");
 });
 
