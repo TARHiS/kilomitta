@@ -70,7 +70,7 @@ $("#edit-dialog-save").click(function(e) {
 
   matkat[btn.data("matka")] = matka;
 
-  storage.set("matkat", matkat);
+  storage.set("matkat", matkat.reverse());
 
   $("#matkat tbody").html("");
   initMatkat();
