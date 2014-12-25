@@ -27,11 +27,9 @@ $.each(matkat, function(index, matka) {
       ).append(
         $("<button/>", {
           "type": "button",
-          "class": "btn btn-default matka-edit pull-right",
+          "class": "btn btn-default matka-edit pull-right glyphicon glyphicon-edit",
           "data-matka": index,
-        }).append(
-          $("<span/>", {"class": "glyphicon glyphicon-edit", "aria-hidden": "true"})
-        )
+        })
       )
     )
   );
@@ -47,10 +45,18 @@ $("#matkat tbody").on("click", "button.matka-edit", function (e) {
   var matka = matkat[btn.data("matka")];
 
   $("#edit-dialog-save").data("matka", btn.data("matka"));
-  $("#edit-dialog-selite").val(matka.selite || "");
-  $("#edit-dialog-tarkoitus").val(matka.tarkoitus || "");
-  $("#edit-dialog-alkulukema").val(matka.alkulukema || 0);
-  $("#edit-dialog-loppulukema").val(matka.loppulukema || 0);
+  if (matka.selite) {
+    $("#edit-dialog-selite").val(matka.selite);
+  }
+  if (matka.tarkoitus) {
+    $("#edit-dialog-tarkoitus").val(matka.tarkoitus);
+  }
+  if (matka.alkulukema) {
+    $("#edit-dialog-alkulukema").val(matka.alkulukema);
+  }
+  if (matka.loppulukema) {
+    $("#edit-dialog-loppulukema").val(matka.loppulukema);
+  }
   $("#edit-dialog").modal("show");
 });
 
