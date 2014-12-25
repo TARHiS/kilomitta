@@ -8,6 +8,23 @@ var gMark = null;
 var updateLocation = null;
 var errorLocation = null;
 var watchPosition = null;
+var tarkoitukset = [];
+var selitteet = [];
+var matkat = [];
+
+if (storage.isSet("matkat")) {
+  matkat = storage.get("matkat");
+}
+
+$.each(matkat, function (undefined, matka) {
+  if ($.inArray(matka.tarkoitus, tarkoitukset) == -1) {
+    tarkoitukset.push(matka.tarkoitus);
+  }
+  if ($.inArray(matka.selite, selitteet) == -1) {
+    selitteet.push(matka.selite);
+  }
+});
+
 
 function calcDistance(coords1,coords2) {
   var R = 6371; // km
@@ -117,9 +134,14 @@ function store_string(field) {
 
 $("#input-kilometri-start").change(store_int("alkulukema"));
 $("#input-kilometri-end").change(store_int("loppulukema"));
-$("#input-kilometri-tarkoitus").change(store_string("tarkoitus"));
-$("#input-kilometri-selite").change(store_string("selite"));
-
+$("#input-kilometri-selite").autocomplete({
+  source: selitteet,
+  change: store_string("selite"),
+});
+$("#input-kilometri-tarkoitus").autocomplete({
+  source: tarkoitukset,
+  change: store_string("tarkoitus"),
+});
 $("#btn-asetukset").click(function() {
   document.location = "asetukset.html";
 });
