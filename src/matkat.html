@@ -14,6 +14,48 @@
 </head>
 <body>
 
+<div id="edit-dialog" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Testi</h3>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="edit-dialog-selite" class="control-label col-xs-4">Selite:</label>
+            <div class="col-xs-8">
+              <input id="edit-dialog-selite" class="form-control" type="text">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="edit-dialog-tarkoitus" class="control-label col-xs-4">Tarkoitus:</label>
+            <div class="col-xs-8">
+              <input id="edit-dialog-tarkoitus" class="form-control" type="text">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="edit-dialog-alkulukema" class="control-label col-xs-4">Alkulukema:</label>
+            <div class="col-xs-8">
+              <input id="edit-dialog-alkulukema" class="form-control" type="number">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="edit-dialog-loppulukema" class="control-label col-xs-4">Loppulukema:</label>
+            <div class="col-xs-8">
+              <input id="edit-dialog-loppulukema" class="form-control" type="number">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Peru</button>
+        <button type="button" class="btn btn-primary" id="edit-dialog-save">Tallenna</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
 
 <button id="btn-takaisin" class="btn btn-block btn-default"><br>Takaisin<br>&nbsp;</button>
