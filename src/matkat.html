@@ -2,90 +2,90 @@
 <!-- vi: et sw=2 fileencoding=utf8
 -->
 <html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="format-detection" content="telephone=no" />
-  <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" /> 
-<!-- <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" /> -->
-  <link rel="stylesheet" type="text/css" href="css/main.css" />
-  <title>Matkat</title>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" /> 
+    <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" /> -->
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <title>Matkat</title>
+  </head>
+  <body>
 
-<div id="edit-dialog" class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Testi</h3>
-      </div>
-      <div class="modal-body">
-        <form class="form-horizontal">
-          <div class="form-group">
-            <label for="edit-dialog-selite" class="control-label col-xs-4">Selite:</label>
-            <div class="col-xs-8">
-              <input id="edit-dialog-selite" class="form-control" type="text">
-            </div>
+    <div id="edit-dialog" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Testi</h3>
           </div>
-          <div class="form-group">
-            <label for="edit-dialog-tarkoitus" class="control-label col-xs-4">Tarkoitus:</label>
-            <div class="col-xs-8">
-              <input id="edit-dialog-tarkoitus" class="form-control" type="text">
-            </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label for="edit-dialog-selite" class="control-label col-xs-4">Selite:</label>
+                <div class="col-xs-8">
+                  <input id="edit-dialog-selite" class="form-control" type="text">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="edit-dialog-tarkoitus" class="control-label col-xs-4">Tarkoitus:</label>
+                <div class="col-xs-8">
+                  <input id="edit-dialog-tarkoitus" class="form-control" type="text">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="edit-dialog-alkulukema" class="control-label col-xs-4">Alkulukema:</label>
+                <div class="col-xs-8">
+                  <input id="edit-dialog-alkulukema" class="form-control" type="number">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="edit-dialog-loppulukema" class="control-label col-xs-4">Loppulukema:</label>
+                <div class="col-xs-8">
+                  <input id="edit-dialog-loppulukema" class="form-control" type="number">
+                </div>
+              </div>
+            </form>
           </div>
-          <div class="form-group">
-            <label for="edit-dialog-alkulukema" class="control-label col-xs-4">Alkulukema:</label>
-            <div class="col-xs-8">
-              <input id="edit-dialog-alkulukema" class="form-control" type="number">
-            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Peru</button>
+            <button type="button" class="btn btn-primary" id="edit-dialog-save">Tallenna</button>
           </div>
-          <div class="form-group">
-            <label for="edit-dialog-loppulukema" class="control-label col-xs-4">Loppulukema:</label>
-            <div class="col-xs-8">
-              <input id="edit-dialog-loppulukema" class="form-control" type="number">
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Peru</button>
-        <button type="button" class="btn btn-primary" id="edit-dialog-save">Tallenna</button>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="container">
+    <div class="container">
 
-<button id="btn-takaisin" class="btn btn-block btn-default"><br>Takaisin<br>&nbsp;</button>
+      <button id="btn-takaisin" class="btn btn-block btn-default"><br>Takaisin<br>&nbsp;</button>
 
-<h3>Matkat</h3>
+      <h3>Matkat</h3>
 
-<table id="matkat" class="table" width="100%" cellspacing="0">
-  <thead>
-    <tr>
-      <th>Selite<br>Tarkoitus</th>
-      <th>Aloitusaika<br>Lopetusaika</th>
-      <th>Alkulukema<br>Loppulukema</th>
-      <th>Pituus km</th>
-    </tr>
-  </thead>
+      <table id="matkat" class="table" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Selite<br>Tarkoitus</th>
+            <th>Aloitusaika<br>Lopetusaika</th>
+            <th>Alkulukema<br>Loppulukema</th>
+            <th>Pituus km</th>
+          </tr>
+        </thead>
 
-  <tfoot>
-  </tfoot>
+        <tfoot>
+        </tfoot>
 
-  <tbody>
-  </tbody>
-</table>
-</div>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 
-<script type="text/javascript" src="js/jquery.storageapi.min.js"></script>
-<script type="text/javascript" src="js/global.js"></script>
-<script type="text/javascript" src="js/matkat.js"></script>
-</body>
+    <script type="text/javascript" src="js/jquery.storageapi.min.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/matkat.js"></script>
+  </body>
 </html>

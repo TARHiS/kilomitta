@@ -11,10 +11,10 @@ if (storage.isSet("matka")) {
 $("#btn-matka").click(function() {
   storage.set("matka", {
     aloitusaika: new Date(),
-    alkulukema: 0,
-    loppulukema: 0,
+    alkulukema: new Number(0),
+    loppulukema: new Number(0),
     positions: new Array(),
-    pituus: 0,
+    pituus: new Number(0),
     selite: "",
     tarkoitus: "",
   });

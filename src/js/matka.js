@@ -2,6 +2,7 @@
 //
 
 var logged = false;
+var GPS = false;
 var showMap = true;
 var gMap = null;
 var gMark = null;
@@ -31,8 +32,8 @@ function calcDistance(coords1,coords2) {
   var dLat = (coords2.latitude - coords1.latitude).toRad();
   var dLon = (coords2.longitude - coords1.longitude).toRad(); 
   var a = Math.sin(dLat / 2.0) * Math.sin(dLat / 2.0) +
-          Math.cos(coords1.latitude.toRad()) * Math.cos(coords2.latitude.toRad()) * 
-          Math.sin(dLon / 2.0) * Math.sin(dLon / 2.0); 
+      Math.cos(coords1.latitude.toRad()) * Math.cos(coords2.latitude.toRad()) * 
+      Math.sin(dLon / 2.0) * Math.sin(dLon / 2.0); 
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
   var d = R * c;
   return d * 1000;
@@ -46,9 +47,15 @@ if (storage.isSet("showMap")) {
   showMap = storage.get("showMap");
 }
 
+if(GPS) {
+  $("#input-GPS-enable").prop('checked', true);
+} else {
+  $("#input-GPS-enable").prop('checked', false);
+}
+
 var matka = storage.get("matka");
 
-$("#span-aloitusaika").text(moment(matka.aloitusaika).format("DD.MM.YYYY HH:mm"));
+//$("#span-aloitusaika").text(moment(matka.aloitusaika).format("DD.MM.YYYY HH:mm"));
 
 updateLocation = function(p) {
   if (p == null) {
@@ -76,6 +83,10 @@ updateLocation = function(p) {
 
   matka.positions.push(p);
   matka.pituus += pituus; 
+  
+  if(GPS) {
+    $("#input-kilometri-lukema").val(matka.pituus);
+  }
 
   // Määritetään etäisyydelle oikea yksikkö 
   if(matka.pituus < 1000) {
@@ -117,7 +128,7 @@ function store_int(field) {
     var value = $(e.target).val();
 
     if (value != 0) {
-      matka[field] = value;
+      matka[field] = Number(value);
       storage.set("matka", matka);
     }
   }
@@ -132,18 +143,26 @@ function store_string(field) {
   }
 }
 
-$("#input-kilometri-start").change(store_int("alkulukema"));
-$("#input-kilometri-end").change(store_int("loppulukema"));
+$("#input-kilometri-lukema").change(store_int("alkulukema"));
+//$("#input-kilometri-end").change(store_int("loppulukema"));
 $("#input-kilometri-selite").autocomplete({
   source: selitteet,
   change: store_string("selite"),
 });
+
 $("#input-kilometri-tarkoitus").autocomplete({
   source: tarkoitukset,
   change: store_string("tarkoitus"),
 });
+
 $("#btn-asetukset").click(function() {
   document.location = "asetukset.html";
+});
+
+$("#input-GPS-enable").click(function() {
+  GPS = !GPS;
+  $("#input-kilometri-lukema").val(matka.pituus);
+  $("#input-kilometri-lukema").prop('disabled',!$("#input-kilometri-lukema").prop('disabled'))
 });
 
 $("#btn-lopeta-ei-tallennus").click(function(){
@@ -153,32 +172,44 @@ $("#btn-lopeta-ei-tallennus").click(function(){
   }
 });
 
-$("#btn-lopeta").click(function(){
-  if (matka.alkulukema == 0) {
-    alert("Syötä alkulukema");
-    return;
-  }
-
-  if (matka.loppulukema == 0) {
-    alert("Syötä loppulukema");
-    return;
-  }
-
-  if (matka.alkulukema > matka.loppulukema) {
-    alert("Loppulukema ei voi olla isompi kuin alkulukema!");
-    return;
-  }
-
-  matka.lopetusaika = new Date();
-
+$("#btn-valimatka").click(function() {
   var matkat = storage.get("matkat");
+    
+  if (matka.alkulukema < 0) {
+    alert("Syötä kilometrilukema!");
+    return;
+  }
 
-  console.log(matkat);
+  if (!matkat.isEmpty() && (matkat.last().alkulukema > matka.alkulukema) ) {
+    alert("Kilometri ei voi olla pienempi kuin edellinen lukema!");
+    return;
+  }
+  
+  matka.lopetusaika = new Date();
   matkat.push(matka);
-
+  console.log(matkat);
+  
   storage.set("matkat", matkat);
+
+  $("#matka tbody").prepend(
+    $("<tr/>").append(
+      $("<td/>").html(
+        (matka.selite || "") + "<br>" +
+        (matka.tarkoitus || "")
+      )
+    ).append(
+      $("<td/>").html(
+        moment(matka.lopetusaika).format("DD.MM.YYYY HH:mm")
+      )
+    ).append(
+      $("<td/>").html(
+        matka.alkulukema
+      )
+    )
+  );
+
   storage.remove("matka");
-  document.location = "index.html";
+  //document.location = "index.html";  
 });
 
 $("#btn-keskita").click(function(){
@@ -226,7 +257,7 @@ function googleMapInitialize() {
   gMap = new google.maps.Map(
     $(".google-map")[0],
     mapOptions
- );
+  );
 
 }
 
