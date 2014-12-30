@@ -207,6 +207,10 @@ $("#edit-dialog-save").click(function(e){
 });
 
 $("#matka-dialog-save").click(function(e){
+  $("#matka-dialog").modal("hide");
+});
+
+$("#matka-dialog").on("hide.bs.modal", function (e) {
   matka.selite = $("#matka-dialog-selite").val();
   matka.tarkoitus = $("#matka-dialog-tarkoitus").val();
   matka.alkulukema = $("#matka-dialog-alkulukema").val();
@@ -221,10 +225,6 @@ $("#matka-dialog-save").click(function(e){
 
   storage.set("matka", matka);
 
-  $("#matka-dialog").modal("hide");
-});
-
-$("#matka-dialog").on("hide.bs.modal", function (e) {
   if ($("#matka-dialog").data("state") == "new") {
     if ($("#matka-dialog-alkulukema").val() == 0) {
       $("#matka-dialog-alkulukema").closest(".form-group").addClass("has-error");
