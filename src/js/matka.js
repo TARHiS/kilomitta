@@ -12,6 +12,7 @@ var watchPosition = null;
 var tarkoitukset = [];
 var selitteet = [];
 var matkat = [];
+var matka = storage.get("matka");
 
 if (storage.isSet("matkat")) {
   matkat = storage.get("matkat");
@@ -26,8 +27,7 @@ $.each(matkat, function (undefined, matka) {
   }
 });
 
-
-function calcDistance(coords1,coords2) {
+function calcDistance(coords1, coords2) {
   var R = 6371; // km
   var dLat = (coords2.latitude - coords1.latitude).toRad();
   var dLon = (coords2.longitude - coords1.longitude).toRad(); 
@@ -53,18 +53,14 @@ if(GPS) {
   $("#input-GPS-enable").prop('checked', false);
 }
 
-var matka = storage.get("matka");
-
-//$("#span-aloitusaika").text(moment(matka.aloitusaika).format("DD.MM.YYYY HH:mm"));
-
 updateLocation = function(p) {
   if (p == null) {
     return;
   }
 
   $("#span-sijainti").text(
-    "lat: " + p.coords.latitude +
-    ", lng: " + p.coords.longitude +
+    p.coords.latitude.toFixed(6) +
+    "," + p.coords.longitude.toFixed(6) +
     ", acc: " + p.coords.accuracy
   );
 
@@ -123,36 +119,12 @@ errorLocation = function(e) {
   navigator.geolocation.clearWatch(watchPosition);
 }
 
-function store_int(field) {
-  return function (e) {
-    var value = $(e.target).val();
-
-    if (value != 0) {
-      matka[field] = Number(value);
-      storage.set("matka", matka);
-    }
-  }
-}
-
-function store_string(field) {
-  return function (e) {
-    var value = $(e.target).val();
-
-    matka[field] = value;
-    storage.set("matka", matka);
-  }
-}
-
-$("#input-kilometri-lukema").change(store_int("alkulukema"));
-//$("#input-kilometri-end").change(store_int("loppulukema"));
 $("#input-kilometri-selite").autocomplete({
   source: selitteet,
-  change: store_string("selite"),
 });
 
 $("#input-kilometri-tarkoitus").autocomplete({
   source: tarkoitukset,
-  change: store_string("tarkoitus"),
 });
 
 $("#btn-asetukset").click(function() {
@@ -173,43 +145,60 @@ $("#btn-lopeta-ei-tallennus").click(function(){
 });
 
 $("#btn-valimatka").click(function() {
-  var matkat = storage.get("matkat");
-    
-  if (matka.alkulukema < 0) {
+  var kmlkm = $("#input-kilometri-lukema").val();
+
+  if (kmlkm < 0) {
     alert("Syötä kilometrilukema!");
     return;
   }
 
-  if (!matkat.isEmpty() && (matkat.last().alkulukema > matka.alkulukema) ) {
+  if (!matka.valimatkat.isEmpty() && (matka.valimatkat.last().kmlkm > kmlkm) ) {
     alert("Kilometri ei voi olla pienempi kuin edellinen lukema!");
     return;
   }
-  
-  matka.lopetusaika = new Date();
-  matkat.push(matka);
-  console.log(matkat);
-  
-  storage.set("matkat", matkat);
 
-  $("#matka tbody").prepend(
-    $("<tr/>").append(
-      $("<td/>").html(
-        (matka.selite || "") + "<br>" +
-        (matka.tarkoitus || "")
-      )
-    ).append(
-      $("<td/>").html(
-        moment(matka.lopetusaika).format("DD.MM.YYYY HH:mm")
-      )
-    ).append(
-      $("<td/>").html(
-        matka.alkulukema
-      )
-    )
-  );
+  valimatka = {
+    selite: $("#input-kilometri-selite").val(),
+    tarkoitus: $("#input-kilometri-tarkoitus").val(),
+    kmlkm: $("#input-kilometri-lukema").val(),
+    lopetusaika: new Date(),
+  }
 
-  storage.remove("matka");
-  //document.location = "index.html";  
+  appendValimatka(matka.valimatkat.length, valimatka);
+
+  matka.valimatkat.push(valimatka);
+
+  storage.set("matka", matka);
+});
+
+$("#valimatkat tbody").on("dblclick", "tr", function(e) {
+  var tr = $(e.target).closest("tr");
+
+  var valimatka = matka.valimatkat[tr.data("index")];
+
+  $("#edit-dialog-save").data("index", tr.data("index"));
+  $("#edit-dialog-selite").val(valimatka.selite);
+  $("#edit-dialog-tarkoitus").val(valimatka.tarkoitus);
+  $("#edit-dialog-kmlkm").val(valimatka.kmlkm);
+
+  $("#edit-dialog").modal("show");
+});
+
+$("#edit-dialog-save").click(function(e){
+  var btn = $(e.target);
+
+  var valimatka = matka.valimatkat[btn.data("index")];
+  
+  valimatka.selite = $("#edit-dialog-selite").val();
+  valimatka.tarkoitus = $("#edit-dialog-tarkoitus").val();
+  valimatka.kmlkm = $("#edit-dialog-kmlkm").val();
+
+  matka.valimatkat[btn.data("index")] = valimatka;
+
+  $("#valimatkat tbody").html("");
+  $.each(matka.valimatkat, appendValimatka);
+
+  $("#edit-dialog").modal("hide");
 });
 
 $("#btn-keskita").click(function(){
@@ -234,6 +223,30 @@ $("#btn-map").click(function(){
 
   storage.set("showMap", showMap);
 });
+
+
+function appendValimatka(index, valimatka) {
+  $("#valimatkat tbody").prepend(
+    $("<tr/>", {"data-index": index}).append(
+      $("<td/>").text(
+        index + 1
+      )
+    ).append(
+      $("<td/>").html(
+        (valimatka.selite || "") + "<br>" +
+        (valimatka.tarkoitus || "")
+      )
+    ).append(
+      $("<td/>").text(
+        moment(valimatka.lopetusaika).format("DD.MM.YYYY HH:mm")
+      )
+    ).append(
+      $("<td/>").html(
+        valimatka.kmlkm
+      )
+    )
+  );
+}
 
 function googleMapInitialize() {
   if (!showMap) {
@@ -276,3 +289,4 @@ if (logged) {
   $(".google-map").hide();
 }
 
+$.each(matka.valimatkat, appendValimatka);

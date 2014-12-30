@@ -16,28 +16,65 @@
 
   <body>
 
+    <div id="edit-dialog" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Muokkaa välimatkan tietoja</h3>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label for="edit-dialog-selite" class="control-label col-xs-4">Selite:</label>
+                <div class="col-xs-8">
+                  <input id="edit-dialog-selite" class="form-control" type="text">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="edit-dialog-tarkoitus" class="control-label col-xs-4">Tarkoitus:</label>
+                <div class="col-xs-8">
+                  <input id="edit-dialog-tarkoitus" class="form-control" type="text">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="edit-dialog-kmlkm" class="control-label col-xs-4">Kilomterilukema:</label>
+                <div class="col-xs-8">
+                  <input id="edit-dialog-kmlkm" class="form-control" type="number">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Peru</button>
+            <button type="button" class="btn btn-primary" id="edit-dialog-save">Tallenna</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <div class="container">
 
       <div class="row">
 
-        <div class="col-xs-4 col-md-4">
+        <div class="col-xs-4">
           <div class="form-group">
-            <label for="input-kilometri-selite" class="h3">Matkan selite</label>
+            <label for="input-kilometri-selite" class="h3">Välimatkan selite</label>
             <input type="text" class="form-control input-lg" id="input-kilometri-selite" placeholder="Syötä matkan selite">
           </div>
         </div>
 
-        <div class="col-xs-4 col-md-4">
+        <div class="col-xs-5">
           <div class="form-group">
-            <label for="input-kilometri-tarkoitus" class="h3">Matkan tarkoitus</label>
+            <label for="input-kilometri-tarkoitus" class="h3">Välimatkan tarkoitus</label>
             <input type="text" class="form-control input-lg" id="input-kilometri-tarkoitus" placeholder="Syötä matkan tarkoitus">
           </div>
         </div>
 
-        <div class="col-xs-4 col-md-4">
+        <div class="col-xs-3">
           <div class="form-group">
-            <label for="input-kilometri-lukema" class="h3">Kilometrilukema</label>
-            <input type="number" class="form-control input-lg" id="input-kilometri-lukema" placeholder="Syötä kilometrilukema">
+            <label for="input-kilometri-lukema" class="h3">Lukema</label>
+            <input type="number" class="form-control input-lg" id="input-kilometri-lukema" placeholder="km">
           </div>
         </div>
 
@@ -76,9 +113,10 @@
 
       <div class="row">
         
-        <table id="matka" class="table table-bordered table-striped" width="100%" cellspacing="0">
+        <table id="valimatkat" class="table table-bordered table-striped table-condensed">
           <thead>
             <tr>
+              <th style="width: 5%">#</th>
               <th>Selite</th>
               <th style="width: 30%">Aika</th>
               <th style="width: 20%">Kilometrilukema</th>
