@@ -152,7 +152,7 @@ $("#btn-lopeta-ei-tallennus").click(function(){
 });
 
 $("#btn-valimatka").click(function() {
-  if ($("#input-kilometri-lukema").val()) {
+  if (!$("#input-kilometri-lukema").val()) {
     alert("Syötä kilometrilukema!");
     return;
   }
@@ -176,7 +176,7 @@ $("#btn-valimatka").click(function() {
 
   matka.valimatkat.push(valimatka);
 
-  $("#input-kilometri-selite").val(null);
+  $("#input-kilometri-selite").val("");
   storage.set("matka", matka);  
 });
 
@@ -198,7 +198,10 @@ $("#edit-dialog-save").click(function(e){
   var valimatka = matka.valimatkat[btn.data("index")];
 
   valimatka.selite = $("#edit-dialog-selite").val();
-  valimatka.kmlkm = parseInt($("#edit-dialog-kmlkm").val());
+
+  if ($("#edit-dialog-kmlkm").val()) {
+    valimatka.kmlkm = parseInt($("#edit-dialog-kmlkm").val());
+  }
 
   matka.valimatkat[btn.data("index")] = valimatka;
 
@@ -228,22 +231,23 @@ $("#matka-dialog").on("hide.bs.modal", function (e) {
   storage.set("matka", matka);
 
   if ($("#matka-dialog").data("state") == "new") {
-    if ($("#matka-dialog-alkulukema").val()) {
+    if (!$("#matka-dialog-alkulukema").val()) {
       $("#matka-dialog-alkulukema").closest(".form-group").addClass("has-error");
       return false;
     }
 
+    $("#matka-dialog-h3-uusi").hide();
     $("#matka-dialog-alkulukema").closest(".form-group").removeClass("has-error");
     $("#matka-dialog .modal-footer button.btn-default").show();
   } else if ($("#matka-dialog").data("state") == "end") {
-    if ($("#matka-dialog-alkulukema").val()) {
+    if (!$("#matka-dialog-alkulukema").val()) {
       $("#matka-dialog-alkulukema").closest(".form-group").addClass("has-error");
       return false;
     }
 
     $("#matka-dialog-alkulukema").closest(".form-group").removeClass("has-error");
 
-    if ($("#matka-dialog-loppulukema").val()) {
+    if (!$("#matka-dialog-loppulukema").val()) {
       $("#matka-dialog-loppulukema").closest(".form-group").addClass("has-error");
       return false;
     }
@@ -272,7 +276,7 @@ $("#matka-dialog .modal-footer button.btn-default").click(function(e){
 
 $("#btn-matka").click(function(e) {
   $("#matka-dialog-loppulukema").val($("#input-kilometri-lukema").val())
-  $("#matka-dialog-h3-muokkaa").show();
+  $("#matka-dialog-h3-paata").show();
   $("#matka-dialog").data("state", "end");
   $("#matka-dialog-save").text("Lopeta");
   $("#matka-dialog").modal("show");
