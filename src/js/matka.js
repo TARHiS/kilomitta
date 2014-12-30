@@ -92,11 +92,13 @@ updateLocation = function(p) {
 
   matka.positions.push(p);
 
-  if(autoUpdateLukema && matka.alkulukema >= 0) {
+  if (autoUpdateLukema && matka.alkulukema >= 0) {
     
     //FIXME: Antaa nyt hieman epätarkkaa arviota
-    var lukema = Number($("#input-kilometri-lukema").val()) + Number(Math.round(pituus/1000));
-    $("#input-kilometri-lukema").val(lukema);
+    //var lukema = Number($("#input-kilometri-lukema").val()) + Number(Math.round(pituus/1000));
+    $("#input-kilometri-lukema").val(
+      Math.round(matka.alkulukema + matka.pituus)
+    );
   }
 
   if (!logged) {
@@ -162,9 +164,8 @@ $("#btn-valimatka").click(function() {
     return;
   }
 
-  valimatka = {
+  var valimatka = {
     selite: $("#input-kilometri-selite").val(),
-    tarkoitus: $("#input-kilometri-tarkoitus").val(),
     kmlkm: $("#input-kilometri-lukema").val(),
     lopetusaika: new Date(),
   }
@@ -225,14 +226,54 @@ $("#matka-dialog-save").click(function(e){
 
 $("#matka-dialog").on("hide.bs.modal", function (e) {
   if ($("#matka-dialog").data("state") == "new") {
-    if ($("#matka-dialog-alkulukema").val() < 0) {
-      $("#matka-dialog-alkulukema").parent().parent().addClass("has-error");
+    if ($("#matka-dialog-alkulukema").val() == 0) {
+      $("#matka-dialog-alkulukema").closest(".form-group").addClass("has-error");
       return false;
     }
 
-    $("#matka-dialog-alkulukema").parent().parent().removeClass("has-error");
+    $("#matka-dialog-alkulukema").closest(".form-group").removeClass("has-error");
     $("#matka-dialog .modal-footer button.btn-default").show();
+  } else if ($("#matka-dialog").data("state") == "end") {
+    if ($("#matka-dialog-alkulukema").val() == 0) {
+      $("#matka-dialog-alkulukema").closest(".form-group").addClass("has-error");
+      return false;
+    }
+
+    $("#matka-dialog-alkulukema").closest(".form-group").removeClass("has-error");
+
+    if ($("#matka-dialog-loppulukema").val() == 0) {
+      $("#matka-dialog-loppulukema").closest(".form-group").addClass("has-error");
+      return false;
+    }
+
+    $("#matka-dialog-loppulukema").closest(".form-group").removeClass("has-error");
+    if (confirm("Haluatko lopettaa?")) {
+      var valimatka = {
+        selite: "Lopetus",
+        kmlkm: matka.loppulukema,
+        lopetusaika: new Date(),
+      }
+      matka.valimatkat.push(valimatka);
+      matka.lopetusaika = valimatka.lopetusaika;
+      matkat.push(matka);
+      storage.set("matkat", matkat);
+      storage.remove("matka");
+      document.location = "index.html";
+    }
   }
+});
+
+$("#matka-dialog .modal-footer button.btn-default").click(function(e){
+  $("#matka-dialog").data("state", "");
+  $("#matka-dialog").modal("hide");
+});
+
+$("#btn-matka").click(function(e) {
+  $("#matka-dialog-loppulukema").val($("#input-kilometri-lukema").val())
+  $("#matka-dialog-h3-muokkaa").show();
+  $("#matka-dialog").data("state", "end");
+  $("#matka-dialog-save").text("Lopeta");
+  $("#matka-dialog").modal("show");
 });
 
 $("#btn-keskita").click(function(){
@@ -326,9 +367,10 @@ $("#matka-dialog .modal-header h3").hide();
 
 if (!matka.valimatkat.isEmpty() && matka.valimatkat[0].kmlkm == -1) {
   $("#matka-dialog-h3-uusi").show();
-  $("#matka-dialog").modal("show");
   $("#matka-dialog").data("state", "new");
   $("#matka-dialog .modal-footer button.btn-default").hide();
+  $("#matka-dialog-save").text("Aloita");
+  $("#matka-dialog").modal("show");
 }
 
 $.each(matka.valimatkat, appendValimatka);
