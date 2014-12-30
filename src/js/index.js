@@ -15,8 +15,7 @@ $("#btn-matka").click(function() {
     loppulukema: new Number(0),
     valimatkat: [{
       selite: "Aloitus",
-      tarkoitus: "",
-      kmlkm: 0,
+      kmlkm: -1,
       lopetusaika: new Date(),
     }],
     positions: new Array(),

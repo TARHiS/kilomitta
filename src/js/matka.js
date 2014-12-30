@@ -123,7 +123,11 @@ $("#input-kilometri-selite").autocomplete({
   source: selitteet,
 });
 
-$("#input-kilometri-tarkoitus").autocomplete({
+$("#matka-dialog-selite").autocomplete({
+  source: selitteet,
+});
+
+$("#matka-dialog-tarkoitus").autocomplete({
   source: tarkoitukset,
 });
 
@@ -131,6 +135,7 @@ $("#btn-asetukset").click(function() {
   document.location = "asetukset.html";
 });
 
+// FIXME käytetäänkö?
 $("#input-GPS-enable").click(function() {
   GPS = !GPS;
   $("#input-kilometri-lukema").val(matka.pituus);
@@ -178,7 +183,6 @@ $("#valimatkat tbody").on("dblclick", "tr", function(e) {
 
   $("#edit-dialog-save").data("index", tr.data("index"));
   $("#edit-dialog-selite").val(valimatka.selite);
-  $("#edit-dialog-tarkoitus").val(valimatka.tarkoitus);
   $("#edit-dialog-kmlkm").val(valimatka.kmlkm);
 
   $("#edit-dialog").modal("show");
@@ -190,7 +194,6 @@ $("#edit-dialog-save").click(function(e){
   var valimatka = matka.valimatkat[btn.data("index")];
   
   valimatka.selite = $("#edit-dialog-selite").val();
-  valimatka.tarkoitus = $("#edit-dialog-tarkoitus").val();
   valimatka.kmlkm = $("#edit-dialog-kmlkm").val();
 
   matka.valimatkat[btn.data("index")] = valimatka;
@@ -199,6 +202,34 @@ $("#edit-dialog-save").click(function(e){
   $.each(matka.valimatkat, appendValimatka);
 
   $("#edit-dialog").modal("hide");
+});
+
+$("#matka-dialog-save").click(function(e){
+  matka.selite = $("#matka-dialog-selite").val();
+  matka.tarkoitus = $("#matka-dialog-tarkoitus").val();
+  matka.alkulukema = $("#matka-dialog-alkulukema").val();
+  matka.loppulukema = $("#matka-dialog-loppulukema").val();
+
+  if (matka.valimatkat.length > 0) {
+    matka.valimatkat[0].kmlkm = matka.alkulukema;
+    $("#valimatkat tbody tr:last td:last").text(matka.alkulukema);
+  }
+
+  storage.set("matka", matka);
+
+  $("#matka-dialog").modal("hide");
+});
+
+$("#matka-dialog").on("hide.bs.modal", function (e) {
+  if ($("#matka-dialog").data("state") == "new") {
+    if ($("#matka-dialog-alkulukema").val() == 0) {
+      $("#matka-dialog-alkulukema").parent().parent().addClass("has-error");
+      return false;
+    }
+
+    $("#matka-dialog-alkulukema").parent().parent().removeClass("has-error");
+    $("#matka-dialog .modal-footer button.btn-default").show();
+  }
 });
 
 $("#btn-keskita").click(function(){
@@ -233,8 +264,7 @@ function appendValimatka(index, valimatka) {
       )
     ).append(
       $("<td/>").html(
-        (valimatka.selite || "") + "<br>" +
-        (valimatka.tarkoitus || "")
+        (valimatka.selite || "")
       )
     ).append(
       $("<td/>").text(
@@ -289,4 +319,14 @@ if (logged) {
   $(".google-map").hide();
 }
 
+$("#matka-dialog .modal-header h3").hide();
+
+if (!matka.valimatkat.isEmpty() && matka.valimatkat[0].kmlkm == -1) {
+  $("#matka-dialog-h3-uusi").show();
+  $("#matka-dialog").modal("show");
+  $("#matka-dialog").data("state", "new");
+  $("#matka-dialog .modal-footer button.btn-default").hide();
+}
+
 $.each(matka.valimatkat, appendValimatka);
+
