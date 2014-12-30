@@ -97,7 +97,7 @@ updateLocation = function(p) {
     //FIXME: Antaa nyt hieman epätarkkaa arviota
     //var lukema = Number($("#input-kilometri-lukema").val()) + Number(Math.round(pituus/1000));
     $("#input-kilometri-lukema").val(
-      Math.round(matka.alkulukema + matka.pituus)
+      Math.round(matka.alkulukema + matka.pituus/1000)
     );
   }
 
@@ -106,8 +106,8 @@ updateLocation = function(p) {
   }
 
   var latLng = new google.maps.LatLng(
-    parseFloat(p.coords.latitude),
-    parseFloat(p.coords.longitude)
+    p.coords.latitude,
+    p.coords.longitude
   );
 
   if (gMark == null) {
@@ -152,21 +152,23 @@ $("#btn-lopeta-ei-tallennus").click(function(){
 });
 
 $("#btn-valimatka").click(function() {
-  var kmlkm = $("#input-kilometri-lukema").val();
-
-  if (!$("#input-kilometri-lukema").val() || kmlkm < 0) {
+  if ($("#input-kilometri-lukema").val()) {
     alert("Syötä kilometrilukema!");
     return;
   }
 
-  if (!matka.valimatkat.isEmpty() && (matka.valimatkat.last().kmlkm > kmlkm) && matka.alkulukema > kmlkm) {
+  var kmlkm = parseInt($("#input-kilometri-lukema").val());
+
+  if (!matka.valimatkat.isEmpty()
+    && matka.valimatkat.last().kmlkm > kmlkm
+    && matka.alkulukema > kmlkm) {
     alert("Kilometri ei voi olla pienempi kuin edellinen lukema!");
     return;
   }
 
   var valimatka = {
     selite: $("#input-kilometri-selite").val(),
-    kmlkm: $("#input-kilometri-lukema").val(),
+    kmlkm: kmlkm,
     lopetusaika: new Date(),
   }
 
@@ -196,7 +198,7 @@ $("#edit-dialog-save").click(function(e){
   var valimatka = matka.valimatkat[btn.data("index")];
 
   valimatka.selite = $("#edit-dialog-selite").val();
-  valimatka.kmlkm = $("#edit-dialog-kmlkm").val();
+  valimatka.kmlkm = parseInt($("#edit-dialog-kmlkm").val());
 
   matka.valimatkat[btn.data("index")] = valimatka;
 
@@ -213,8 +215,8 @@ $("#matka-dialog-save").click(function(e){
 $("#matka-dialog").on("hide.bs.modal", function (e) {
   matka.selite = $("#matka-dialog-selite").val();
   matka.tarkoitus = $("#matka-dialog-tarkoitus").val();
-  matka.alkulukema = $("#matka-dialog-alkulukema").val();
-  matka.loppulukema = $("#matka-dialog-loppulukema").val();
+  matka.alkulukema = parseInt($("#matka-dialog-alkulukema").val());
+  matka.loppulukema = parseInt($("#matka-dialog-loppulukema").val());
 
   if (matka.valimatkat.length > 0) {
     matka.valimatkat[0].kmlkm = matka.alkulukema;
@@ -226,7 +228,7 @@ $("#matka-dialog").on("hide.bs.modal", function (e) {
   storage.set("matka", matka);
 
   if ($("#matka-dialog").data("state") == "new") {
-    if ($("#matka-dialog-alkulukema").val() == 0) {
+    if ($("#matka-dialog-alkulukema").val()) {
       $("#matka-dialog-alkulukema").closest(".form-group").addClass("has-error");
       return false;
     }
@@ -234,14 +236,14 @@ $("#matka-dialog").on("hide.bs.modal", function (e) {
     $("#matka-dialog-alkulukema").closest(".form-group").removeClass("has-error");
     $("#matka-dialog .modal-footer button.btn-default").show();
   } else if ($("#matka-dialog").data("state") == "end") {
-    if ($("#matka-dialog-alkulukema").val() == 0) {
+    if ($("#matka-dialog-alkulukema").val()) {
       $("#matka-dialog-alkulukema").closest(".form-group").addClass("has-error");
       return false;
     }
 
     $("#matka-dialog-alkulukema").closest(".form-group").removeClass("has-error");
 
-    if ($("#matka-dialog-loppulukema").val() == 0) {
+    if ($("#matka-dialog-loppulukema").val()) {
       $("#matka-dialog-loppulukema").closest(".form-group").addClass("has-error");
       return false;
     }
