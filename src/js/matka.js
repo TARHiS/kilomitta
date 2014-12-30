@@ -2,10 +2,10 @@
 //
 
 var logged = false;
-var GPS = false;
 var showMap = true;
 var gMap = null;
 var gMark = null;
+var autoUpdateLukema = true;
 var updateLocation = null;
 var errorLocation = null;
 var watchPosition = null;
@@ -47,11 +47,15 @@ if (storage.isSet("showMap")) {
   showMap = storage.get("showMap");
 }
 
-if(GPS) {
-  $("#input-GPS-enable").prop('checked', true);
-} else {
-  $("#input-GPS-enable").prop('checked', false);
-}
+$("#input-kilometri-lukema").focus(function(e) {
+  autoUpdateLukema = false;
+});
+
+$("#input-kilometri-lukema").blur(function(e) {
+  // Asetetaan autoUpdateLukema viivellä, jotta #input-kilometri-lukema sisältö ei
+  // vaihtuisi heti kun se tulee inaktiiviseksi.
+  setTimeout(function() { autoUpdateLukema = true; }, 100);
+});
 
 updateLocation = function(p) {
   if (p == null) {
@@ -77,12 +81,7 @@ updateLocation = function(p) {
     return;
   }
 
-  matka.positions.push(p);
-  matka.pituus += pituus; 
-  
-  if(GPS) {
-    $("#input-kilometri-lukema").val(matka.pituus);
-  }
+  matka.pituus += pituus;  
 
   // Määritetään etäisyydelle oikea yksikkö 
   if(matka.pituus < 1000) {
@@ -91,6 +90,14 @@ updateLocation = function(p) {
     $("#span-pituus").text((Math.round(matka.pituus/100)/10) + "km");
   }
 
+  matka.positions.push(p);
+
+  if(autoUpdateLukema && matka.alkulukema >= 0) {
+    
+    //FIXME: Antaa nyt hieman epätarkkaa arviota
+    var lukema = Number($("#input-kilometri-lukema").val()) + Number(Math.round(pituus/1000));
+    $("#input-kilometri-lukema").val(lukema);
+  }
 
   if (!logged) {
     return;
@@ -135,13 +142,6 @@ $("#btn-asetukset").click(function() {
   document.location = "asetukset.html";
 });
 
-// FIXME käytetäänkö?
-$("#input-GPS-enable").click(function() {
-  GPS = !GPS;
-  $("#input-kilometri-lukema").val(matka.pituus);
-  $("#input-kilometri-lukema").prop('disabled',!$("#input-kilometri-lukema").prop('disabled'))
-});
-
 $("#btn-lopeta-ei-tallennus").click(function(){
   if (confirm("Oletko varma")) {
     storage.remove("matka");
@@ -152,12 +152,12 @@ $("#btn-lopeta-ei-tallennus").click(function(){
 $("#btn-valimatka").click(function() {
   var kmlkm = $("#input-kilometri-lukema").val();
 
-  if (kmlkm < 0) {
+  if (!$("#input-kilometri-lukema").val() || kmlkm < 0) {
     alert("Syötä kilometrilukema!");
     return;
   }
 
-  if (!matka.valimatkat.isEmpty() && (matka.valimatkat.last().kmlkm > kmlkm) ) {
+  if (!matka.valimatkat.isEmpty() && (matka.valimatkat.last().kmlkm > kmlkm) && matka.alkulukema > kmlkm) {
     alert("Kilometri ei voi olla pienempi kuin edellinen lukema!");
     return;
   }
@@ -173,7 +173,8 @@ $("#btn-valimatka").click(function() {
 
   matka.valimatkat.push(valimatka);
 
-  storage.set("matka", matka);
+  $("#input-kilometri-selite").val(null);
+  storage.set("matka", matka);  
 });
 
 $("#valimatkat tbody").on("dblclick", "tr", function(e) {
@@ -192,7 +193,7 @@ $("#edit-dialog-save").click(function(e){
   var btn = $(e.target);
 
   var valimatka = matka.valimatkat[btn.data("index")];
-  
+
   valimatka.selite = $("#edit-dialog-selite").val();
   valimatka.kmlkm = $("#edit-dialog-kmlkm").val();
 
@@ -215,6 +216,8 @@ $("#matka-dialog-save").click(function(e){
     $("#valimatkat tbody tr:last td:last").text(matka.alkulukema);
   }
 
+  $("#input-kilometri-lukema").val(matka.alkulukema);
+
   storage.set("matka", matka);
 
   $("#matka-dialog").modal("hide");
@@ -222,7 +225,7 @@ $("#matka-dialog-save").click(function(e){
 
 $("#matka-dialog").on("hide.bs.modal", function (e) {
   if ($("#matka-dialog").data("state") == "new") {
-    if ($("#matka-dialog-alkulukema").val() == 0) {
+    if ($("#matka-dialog-alkulukema").val() < 0) {
       $("#matka-dialog-alkulukema").parent().parent().addClass("has-error");
       return false;
     }

@@ -22,7 +22,7 @@ function option(name, value) {
 
 if (!Array.prototype.last) {
   Array.prototype.last = function() {
-      return this[this.length - 1];
+    return this[this.length - 1];
   };
 }
 

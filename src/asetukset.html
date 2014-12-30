@@ -2,63 +2,65 @@
 <!-- vi: et sw=2 fileencoding=utf8
 -->
 <html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="format-detection" content="telephone=no" />
-  <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
-<!--  <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" /> -->
-  <link rel="stylesheet" type="text/css" href="css/main.css" />
-  <title>Asetukset</title>
-</head>
+  
+  <head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <!--  <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" /> -->
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <title>Asetukset</title>
+  </head>
 
-<body>
+  <body>
 
-<div class="container">
+    <div class="container">
 
-<h3>Asetukset</h3>
-<hr/>
+      <h3>Asetukset</h3>
+      <hr/>
 
-<div class="row">
-<div class="col-xs-6">
-  <button id="btn-takaisin" class="btn btn-block btn-default"><br>Takaisin<br>&nbsp;</button>
-</div>
-</div>
+      <div class="row">
+        <div class="col-xs-6">
+          <button id="btn-takaisin" class="btn btn-block btn-default"><br>Takaisin<br>&nbsp;</button>
+        </div>
+      </div>
 
-<hr>
+      <hr>
 
-<div class="row">
-<div class="col-xs-4 form-group">
-<label for="input-min-movement">Pienin liike (m):</label>
-<input type="number" id="input-min-movement" class="form-control input-lg">
-</div>
-<div class="col-xs-4 form-group">
-<label for="input-position-frequency">Päivitys tiheys (ms):</label>
-<input type="number" id="input-position-frequency" class="form-control input-lg">
-</div>
-<div class="col-xs-4 checkbox">
-<label>
-<input type="checkbox" id="input-position-enable">
-Ota paikkatieto käyttöön
-</div>
-</div>
+      <div class="row">
+        <div class="col-xs-4 form-group">
+          <label for="input-min-movement">Pienin liike (m):</label>
+          <input type="number" id="input-min-movement" class="form-control input-lg">
+        </div>
+        <div class="col-xs-4 form-group">
+          <label for="input-position-frequency">Päivitys tiheys (ms):</label>
+          <input type="number" id="input-position-frequency" class="form-control input-lg">
+        </div>
+        <div class="col-xs-4 checkbox">
+          <label>
+            <input type="checkbox" id="input-position-enable">
+            Ota paikkatieto käyttöön
+            </div>
+        </div>
 
-<hr>
-<div class="row">
-<div class="col-xs-6 col-xs-offset-3">
-  <button type="button" class="btn btn-danger btn-block" id="btn-reset">Tyhjennä asetukset</button>
-</div>
-</div>
+        <hr>
+        <div class="row">
+          <div class="col-xs-6 col-xs-offset-3">
+            <button type="button" class="btn btn-danger btn-block" id="btn-reset">Tyhjennä asetukset</button>
+          </div>
+        </div>
 
-</div>
+      </div>
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 
-<script type="text/javascript" src="js/jquery.storageapi.min.js"></script>
-<script type="text/javascript" src="js/global.js"></script>
-<script type="text/javascript" src="js/asetukset.js"></script>
-</body>
+      <script type="text/javascript" src="js/jquery.storageapi.min.js"></script>
+      <script type="text/javascript" src="js/global.js"></script>
+      <script type="text/javascript" src="js/asetukset.js"></script>
+      
+  </body>
 </html>

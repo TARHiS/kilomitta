@@ -11,18 +11,18 @@ if (storage.isSet("matka")) {
 $("#btn-matka").click(function() {
   storage.set("matka", {
     aloitusaika: new Date(),
-    alkulukema: new Number(0),
+    alkulukema: new Number(-1),
     loppulukema: new Number(0),
     valimatkat: [{
-      selite: "Aloitus",
-      kmlkm: -1,
+      selite: new String("Aloitus"),
+      kmlkm: new Number(-1),
       lopetusaika: new Date(),
     }],
     positions: new Array(),
     kmlkm: new Number(0),
     pituus: new Number(0),
-    selite: "",
-    tarkoitus: "",
+    selite: new String(),
+    tarkoitus: new String(),
   });
   document.location = "matka.html";
 });

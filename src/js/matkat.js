@@ -4,36 +4,36 @@
 var matkat = storage.get("matkat").reverse();
 
 function initMatkat() {
-$.each(matkat, function(index, matka) {
-  $("#matkat tbody").append(
-    $("<tr/>").append(
-      $("<td/>").html(
-        (matka.selite || "") + "<br>" +
-        (matka.tarkoitus || "")
-      )
-    ).append(
-      $("<td/>").html(
-        moment(matka.aloitusaika).format("DD.MM.YYYY HH:mm") + "<br>" +
-        moment(matka.lopetusaika).format("DD.MM.YYYY HH:mm")
-      )
-    ).append(
-      $("<td/>").html(
-        matka.alkulukema + "<br>" +
-        matka.loppulukema
-      )
-    ).append(
-      $("<td/>").append(
-        matka.loppulukema - matka.alkulukema
+  $.each(matkat, function(index, matka) {
+    $("#matkat tbody").append(
+      $("<tr/>").append(
+        $("<td/>").html(
+          (matka.selite || "") + "<br>" +
+          (matka.tarkoitus || "")
+        )
       ).append(
-        $("<button/>", {
-          "type": "button",
-          "class": "btn btn-default matka-edit pull-right glyphicon glyphicon-edit",
-          "data-matka": index,
-        })
+        $("<td/>").html(
+          moment(matka.aloitusaika).format("DD.MM.YYYY HH:mm") + "<br>" +
+          moment(matka.lopetusaika).format("DD.MM.YYYY HH:mm")
+        )
+      ).append(
+        $("<td/>").html(
+          matka.alkulukema + "<br>" +
+          matka.loppulukema
+        )
+      ).append(
+        $("<td/>").append(
+          matka.loppulukema - matka.alkulukema
+        ).append(
+          $("<button/>", {
+            "type": "button",
+            "class": "btn btn-default matka-edit pull-right glyphicon glyphicon-edit",
+            "data-matka": index,
+          })
+        )
       )
-    )
-  );
-});
+    );
+  });
 }
 
 $("#btn-takaisin").click(function(){
