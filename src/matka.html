@@ -36,12 +36,7 @@
 
         <div class="col-xs-4 col-md-4">
           <div class="form-group">
-            <div class="row">
-              <label for="input-kilometri-lukema" class="h3 col-md-6">Kilometrilukema</label>
-              <div class="col-md-6">
-                <label class="checkbox-inline pull-right" style="margin-top: 26px"><input type="checkbox" id="input-GPS-enable">Päivitä automaattisesti</label>
-              </div>
-            </div>
+            <label for="input-kilometri-lukema" class="h3">Kilometrilukema</label>
             <input type="number" class="form-control input-lg" id="input-kilometri-lukema" placeholder="Syötä kilometrilukema">
           </div>
         </div>
@@ -52,7 +47,7 @@
 
         <div class="col-xs-2">
           <div id="system-menu" class="dropup">
-            <button type="button" class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown"><br><span class="glyphicon glyphicon-cog"></span><br>&nbsp;</button>
+            <button type="button" class="btn btn-default btn-block btn-touch dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
             <ul class="dropdown-menu" role="menu">
               <li><a href="#" id="btn-keskita">Keskitä kartta<br>&nbsp;</a></li>
               <li><a href="#" id="btn-map">Näytä/piilota kartta<br>&nbsp;</a></li>
@@ -63,16 +58,16 @@
         </div>
 
         <div class="col-xs-3">
-          <button type="button" class="btn btn-default btn-block" id="btn-valimatka"><br>
+          <button type="button" class="btn btn-default btn-block btn-touch" id="btn-valimatka">
             <b>Lisää välimatka</b>
-            <br>&nbsp;</button>
+            </button>
         </div>
 
         <div class="col-xs-7">
-          <p class="bordered-content">
+          <button type="button" class="btn btn-block btn-default btn-touch">
             Sijainti nyt: <span id="span-sijainti"></span><br>
             Kuljettu matka: <span id="span-pituus"></span>
-          </p>
+          </button>
         </div>
 
       </div>
