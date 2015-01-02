@@ -105,7 +105,15 @@
         <div class="col-xs-3">
           <div class="form-group">
             <label for="input-kilometri-lukema" class="h3">Mittarilukema</label>
-            <input type="number" class="form-control input-lg" id="input-kilometri-lukema" placeholder="km">
+              <div class="input-group">
+                <span class="input-group-btn">
+                   <button id="btn-kilometri-miinus" class="btn btn-lg btn-default" type="button" data-muutos="-1"><span class="glyphicon glyphicon-minus"></span></button>
+                </span>
+                <input type="number" class="form-control input-lg" id="input-kilometri-lukema" placeholder="km">
+               <span class="input-group-btn">
+                  <button id="btn-kilometri-plus" class="btn btn-lg btn-default" type="button" data-muutos="1"><span class="glyphicon glyphicon-plus"></span></button>
+               </span>
+             </div>
           </div>
         </div>
 

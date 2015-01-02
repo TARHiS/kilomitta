@@ -13,6 +13,7 @@ var tarkoitukset = [];
 var selitteet = [];
 var matkat = [];
 var matka = storage.get("matka");
+var pohjalukema = matka.alkulukema;
 
 if (storage.isSet("matkat")) {
   matkat = storage.get("matkat");
@@ -92,12 +93,9 @@ updateLocation = function(p) {
 
   matka.positions.push(p);
 
-  if (autoUpdateLukema && matka.alkulukema >= 0) {
-    
-    //FIXME: Antaa nyt hieman epätarkkaa arviota
-    //var lukema = Number($("#input-kilometri-lukema").val()) + Number(Math.round(pituus/1000));
+  if (autoUpdateLukema) {
     $("#input-kilometri-lukema").val(
-      Math.round(matka.alkulukema + matka.pituus/1000)
+      Math.round(pohjalukema + matka.pituus/1000)
     );
   }
 
@@ -221,6 +219,8 @@ $("#matka-dialog").on("hide.bs.modal", function (e) {
   matka.alkulukema = parseInt($("#matka-dialog-alkulukema").val());
   matka.loppulukema = parseInt($("#matka-dialog-loppulukema").val());
 
+  pohjalukema = matka.alkulukema;
+
   if (matka.valimatkat.length > 0) {
     matka.valimatkat[0].kmlkm = matka.alkulukema;
     $("#valimatkat tbody tr:last td:last").text(matka.alkulukema);
@@ -280,6 +280,16 @@ $("#btn-matka").click(function(e) {
   $("#matka-dialog").data("state", "end");
   $("#matka-dialog-save").text("Lopeta");
   $("#matka-dialog").modal("show");
+});
+
+$("#btn-kilometri-plus, #btn-kilometri-miinus").click(function (e) {
+  var muutos = parseInt($(e.target).closest("button").data("muutos"));
+
+  pohjalukema += muutos;
+
+  $("#input-kilometri-lukema").val(
+    Math.round(pohjalukema + matka.pituus/1000)
+  );
 });
 
 $("#btn-keskita").click(function(){
