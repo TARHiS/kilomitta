@@ -182,7 +182,7 @@ $("#btn-valimatka").click(function() {
   storage.set("matka", matka);  
 });
 
-$("#valimatkat tbody").on("dblclick", "tr", function(e) {
+$("#valimatkat tbody").on("click", "button", function(e) {
   var tr = $(e.target).closest("tr");
 
   var valimatka = matka.valimatkat[tr.data("index")];
@@ -237,6 +237,7 @@ $("#matka-dialog").on("hide.bs.modal", function (e) {
   if ($("#matka-dialog").data("state") == "new") {
     if (!$("#matka-dialog-alkulukema").val()) {
       $("#matka-dialog-alkulukema").closest(".form-group").addClass("has-error");
+      $("#matka-dialog-alkulukema").focus();
       return false;
     }
 
@@ -343,6 +344,14 @@ function appendValimatka(index, valimatka) {
       $("<td/>").html(
         valimatka.kmlkm
       )
+    ).append(
+      $("<button/>", {
+          "class": "btn btn-link glyphicon glyphicon-edit"
+        }/*).html(
+        $("<span/>", {
+          "class": "glyphicon glyphicon-edit"
+        })*/
+      )
     )
   );
 }
@@ -399,4 +408,3 @@ if (!matka.valimatkat.isEmpty() && matka.valimatkat[0].kmlkm == -1) {
 }
 
 $.each(matka.valimatkat, appendValimatka);
-
