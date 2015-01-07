@@ -37,3 +37,10 @@ if (!Number.prototype.toRad) {
     return this * Math.PI / 180;
   };
 }
+
+$(".confirm").click(function (e) {
+  if (!confirm("Haluatko varmasti jatkaa toimenpidettä?")) {
+    e.stopImmediatePropagation();
+    return false;
+  }
+});

@@ -187,7 +187,10 @@ $("#valimatkat tbody").on("click", "button", function(e) {
 
   var valimatka = matka.valimatkat[tr.data("index")];
 
+  // Vois asettaa #edit-dialog:iin.
   $("#edit-dialog-save").data("index", tr.data("index"));
+  $("#edit-dialog-delete").data("index", tr.data("index"));
+
   $("#edit-dialog-selite").val(valimatka.selite);
   $("#edit-dialog-kmlkm").val(valimatka.kmlkm);
 
@@ -206,6 +209,17 @@ $("#edit-dialog-save").click(function(e){
   }
 
   matka.valimatkat[btn.data("index")] = valimatka;
+
+  $("#valimatkat tbody").html("");
+  $.each(matka.valimatkat, appendValimatka);
+
+  $("#edit-dialog").modal("hide");
+});
+
+$("#edit-dialog-delete").click(function(e){
+  var btn = $(e.target);
+
+  matka.valimatkat.splice(btn.data("index"), 1);
 
   $("#valimatkat tbody").html("");
   $.each(matka.valimatkat, appendValimatka);
