@@ -273,6 +273,14 @@ $("#matka-dialog").on("hide.bs.modal", function (e) {
   }
 });
 
+$("#matka-dialog").on("shown.bs.modal", function (e) {
+  if ($("#matka-dialog").data("state") == "new") {
+    $("#matka-dialog-alkulukema").focus();
+  } else if ($("#matka-dialog").data("state") == "end") {
+    $("#matka-dialog-loppulukema").focus();
+  }
+});
+
 $("#matka-dialog .modal-footer button.btn-default").click(function(e){
   $("#matka-dialog").data("state", "");
   $("#matka-dialog").modal("hide");
