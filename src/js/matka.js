@@ -58,6 +58,7 @@ $("#input-kilometri-lukema").blur(function(e) {
   setTimeout(function() { autoUpdateLukema = true; }, 100);
 });
 
+// GPS lukemien päivitysfunktion. Kutsutaan aina kun GPS koordinaatit vaihtuu.
 updateLocation = function(p) {
   if (p == null) {
     return;
@@ -76,8 +77,8 @@ updateLocation = function(p) {
     pituus = calcDistance(matka.positions.last().coords, p.coords);
   }
 
-  // Jos etäisyys edellisestä pisteestä on alle
-  // kymmenen metriä, ei tallenneta pistettä.
+  // Jos etäisyys edellisestä pisteestä on alle asetuksissa
+  // säädetyn metrimäärän, ei tallenneta pistettä.
   if(pituus < option("min-movement")) {
     return;
   }
@@ -95,7 +96,7 @@ updateLocation = function(p) {
 
   if (autoUpdateLukema) {
     $("#input-kilometri-lukema").val(
-      Math.round(pohjalukema + matka.pituus/1000)
+      Math.round(pohjalukema + (matka.pituus * matka.virhekerroin)/1000)
     );
   }
 
@@ -158,8 +159,8 @@ $("#btn-valimatka").click(function() {
   var kmlkm = parseInt($("#input-kilometri-lukema").val());
 
   if (!matka.valimatkat.isEmpty()
-    && matka.valimatkat.last().kmlkm > kmlkm
-    && matka.alkulukema > kmlkm) {
+      && matka.valimatkat.last().kmlkm > kmlkm
+      && matka.alkulukema > kmlkm) {
     alert("Kilometri ei voi olla pienempi kuin edellinen lukema!");
     return;
   }
@@ -174,7 +175,10 @@ $("#btn-valimatka").click(function() {
 
   matka.valimatkat.push(valimatka);
 
+  matka.virhekerroin = (kmlkm - matka.alkulukema) / matka.pituus;
+
   $("#input-kilometri-selite").val("");
+
   storage.set("matka", matka);  
 });
 
@@ -285,10 +289,8 @@ $("#btn-matka").click(function(e) {
 $("#btn-kilometri-plus, #btn-kilometri-miinus").click(function (e) {
   var muutos = parseInt($(e.target).closest("button").data("muutos"));
 
-  pohjalukema += muutos;
-
   $("#input-kilometri-lukema").val(
-    Math.round(pohjalukema + matka.pituus/1000)
+    parseInt($("#input-kilometri-lukema").val()) + muutos
   );
 });
 
@@ -314,7 +316,6 @@ $("#btn-map").click(function(){
 
   storage.set("showMap", showMap);
 });
-
 
 function appendValimatka(index, valimatka) {
   $("#valimatkat tbody").prepend(
