@@ -88,15 +88,20 @@ updateLocation = function(p) {
   if(matka.pituus < 1000) {
     $("#span-pituus").text(Math.round(matka.pituus) + "m");
   } else {
-    $("#span-pituus").text((Math.round(matka.pituus/100)/10) + "km");
+    $("#span-pituus").text(
+      (Math.round(matka.pituus/100)/10) + "km * " +
+      matka.virhekerroin + " = " +
+      (Math.round(Math.round(matka.pituus/1000) * matka.virhekerroin))
+    );
   }
 
   matka.positions.push(p);
 
   if (autoUpdateLukema) {
-    console.log(matka.alkulukema + Math.round(matka.pituus/1000) * matka.virhekerroin);
     $("#input-kilometri-lukema").val(
-      matka.alkulukema + Math.round(matka.pituus/1000) * matka.virhekerroin
+      matka.alkulukema + Math.round(
+        Math.round(matka.pituus/1000) * matka.virhekerroin
+      )
     );
   }
 
