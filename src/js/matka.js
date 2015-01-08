@@ -13,7 +13,6 @@ var tarkoitukset = [];
 var selitteet = [];
 var matkat = [];
 var matka = storage.get("matka");
-var pohjalukema = matka.alkulukema;
 
 if (storage.isSet("matkat")) {
   matkat = storage.get("matkat");
@@ -95,8 +94,9 @@ updateLocation = function(p) {
   matka.positions.push(p);
 
   if (autoUpdateLukema) {
+    console.log(matka.alkulukema + Math.round(matka.pituus/1000) * matka.virhekerroin);
     $("#input-kilometri-lukema").val(
-      Math.round(pohjalukema + (matka.pituus * matka.virhekerroin)/1000)
+      matka.alkulukema + Math.round(matka.pituus/1000) * matka.virhekerroin
     );
   }
 
@@ -175,7 +175,7 @@ $("#btn-valimatka").click(function() {
 
   matka.valimatkat.push(valimatka);
 
-  matka.virhekerroin = (kmlkm - matka.alkulukema) / matka.pituus;
+  matka.virhekerroin = (kmlkm - matka.alkulukema) / Math.round(matka.pituus/1000);
 
   $("#input-kilometri-selite").val("");
 
@@ -236,8 +236,6 @@ $("#matka-dialog").on("hide.bs.modal", function (e) {
   matka.tarkoitus = $("#matka-dialog-tarkoitus").val();
   matka.alkulukema = parseInt($("#matka-dialog-alkulukema").val());
   matka.loppulukema = parseInt($("#matka-dialog-loppulukema").val());
-
-  pohjalukema = matka.alkulukema;
 
   if (matka.valimatkat.length > 0) {
     matka.valimatkat[0].kmlkm = matka.alkulukema;

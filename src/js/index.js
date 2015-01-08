@@ -19,6 +19,7 @@ $("#btn-matka").click(function() {
       lopetusaika: new Date(),
     }],
     positions: new Array(),
+    virhekerroin: new Number(1),
     kmlkm: new Number(0),
     pituus: new Number(0),
     selite: new String(),
