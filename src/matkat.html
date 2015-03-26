@@ -17,6 +17,52 @@
   
   <body>
 
+    <div id="open-dialog" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Matkan tietoja</h3>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <b class="col-xs-4">Selite:</b>
+              <span id="open-dialog-selite" class="col-xs-8"></span>
+            </div>
+            <div class="row">
+              <b class="col-xs-4">Tarkoitus:</b>
+              <span id="open-dialog-tarkoitus" class="col-xs-8"></span>
+            </div>
+            <div class="row">
+              <b class="col-xs-4">Alkulukema:</b>
+              <span id="open-dialog-alkulukema" class="col-xs-8"></span>
+            </div>
+            <div class="row">
+              <b class="col-xs-4">Loppulukema:</b>
+              <span id="open-dialog-loppulukema" class="col-xs-8"></span>
+            </div>
+
+            <table class="table" id="open-dialog-valimatkat">
+              <thead>
+                <tr>
+                  <th style="width: 1px"></th>
+                  <th>Selite</th>
+                  <th style="width: 30%">Aika</th>
+                  <th style="width: 20%">Kilometrilukema</th>
+                  <th style="width: 1px"></th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+              <tfoot>
+              </tfoot>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Sulje</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="edit-dialog" class="modal" tabindex="-1" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
