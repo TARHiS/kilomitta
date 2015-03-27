@@ -57,8 +57,11 @@
 <button id="btn-asetukset" class="btn btn-block btn-default">
 <br>Asetukset<br>&nbsp;
 </button>
-<button id="btn-login" class="btn btn-block btn-default">
+<button id="btn-login" class="btn btn-block btn-default" disabled>
 <br>Kirjaudu</br>&nbsp;
+</button>
+<button id="btn-laheta" class="btn btn-block btn-default" style="display: none">
+<br>Lähetä</br>&nbsp;
 </button>
 
 </div>
@@ -69,6 +72,9 @@
 
 <script type="text/javascript" src="js/jquery.storageapi.min.js"></script>
 <script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/gapi.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
+<script src="https://apis.google.com/js/client.js?onload=loadGoogleApi"></script>
+
 </body>
 </html>
