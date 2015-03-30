@@ -8,7 +8,15 @@ var apiKey = "AIzaSyCx3TPoZiGdCcipmGUSIA8h_Zb_3p3wxyg";
 var scopes = [
   "https://www.googleapis.com/auth/fusiontables",
 ];
-
+var kilomittaColumns = [
+  {"name": "Aloitusaika", "type": "DATETIME",},
+  {"name": "Lopetusaika", "type": "DATETIME",},
+  {"name": "Selite", "type": "STRING",},
+  {"name": "Tarkoitus", "type": "STRING",},
+  {"name": "Alkulukema", "type": "NUMBER",},
+  {"name": "Loppulukema", "type": "NUMBER",},
+  {"name": "Matka", "type": "NUMBER",},
+];
 var table = null;
 
 if (storage.isSet("FusionTable")) {
@@ -63,13 +71,26 @@ $("#dialog-login-btn-login").click(function() {
   $("#dialog-login-btn-login").button('loading');
 });
 
+$("#dialog-table-select .modal-body").on("click", "button", function(e) {
+  var btn = $(e.target);
+
+  if (btn.data("action") == "create") {
+    FusionTableCreateNew();
+  } else if (btn.data("action") == "open") {
+    table = btn.data("table-id");
+    storage.set("FusionTable", table);
+  }
+
+  $("#dialog-table-select").modal("hide");
+});
+
 function loadGoogleApi() {
   gapi.client.setApiKey(apiKey);
   gft = new gFusionTables(gapi, storage);
 
-  checkAuth(true);
-
   $("#btn-login").prop("disabled", false);
+
+  checkAuth(true);
 }
 
 function checkAuth(immediate) {
@@ -94,24 +115,52 @@ function handleAuthResult(authResult) {
 
 function initFusionTables() {
   if (!table) {
-    FusionTableCreateNew();
+    $("#dialog-table-select").modal("show");
+    FusionTableTableList();
   }
 }
 
 function FusionTableCreateNew() {
   gft.tableCreate(
-    "Kilomitta", [
-      {"name": "Aloitusaika", "type": "DATETIME",},
-      {"name": "Lopetusaika", "type": "DATETIME",},
-      {"name": "Selite", "type": "STRING",},
-      {"name": "Tarkoitus", "type": "STRING",},
-      {"name": "Alkulukema", "type": "NUMBER",},
-      {"name": "Loppulukema", "type": "NUMBER",},
-      {"name": "Matka", "type": "NUMBER",},
-    ],
+    "Kilomitta", kilomittaColumns,
   function (resp) {
     table = resp.tableId;
     storage.set("FusionTable", table);
+  });
+}
+
+function isKilomittaCompatible(tableDesc) {
+  var loytyi = false;
+
+  $.each(kilomittaColumns, function (undefined, col) {
+    loytyi = false;
+
+    $.each(tableDesc.columns, function (undefined, tmp) {
+      if (col.name == tmp.name && col.type == tmp.type) {
+        loytyi = true;
+        return false;
+      }
+    });
+
+    if (!loytyi) {
+      return false
+    }
+  });
+
+  return loytyi;
+}
+
+function FusionTableTableList() {
+  gft.tableList(function(resp) {
+    $.each(resp.items, function(index, item) {
+      if (isKilomittaCompatible(item)) {
+        $("#dialog-table-select .modal-body").prepend($("<button/>", {
+          class: "btn btn-primary btn-block btn-lg",
+          "data-action": "open",
+          "data-table-id": item.tableId,
+        }).text(item.name));
+      }
+    });
   });
 }
 
@@ -124,8 +173,7 @@ function FusionTableSend() {
       matka.lahetetty = new Date();
 
       gft.tableInsert(
-        table,
-        {
+        table, {
           "Aloitusaika": moment(
             matka.aloitusaika).format("YYYY.MM.DDTHH:mm:ss"),
           "Lopetusaika": moment(
