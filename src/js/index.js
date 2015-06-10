@@ -175,9 +175,9 @@ function FusionTableSend() {
       gft.tableInsert(
         table, {
           "Aloitusaika": moment(
-            matka.aloitusaika).format("YYYY-MM-DDTHH:mm:ss"),
+            matka.aloitusaika).format("YYYY-MM-DD HH:mm:ss"),
           "Lopetusaika": moment(
-            matka.lopetusaika).format("YYYY-MM-DDTHH:mm:ss"),
+            matka.lopetusaika).format("YYYY-MM-DD HH:mm:ss"),
           "Selite": matka.selite,
           "Tarkoitus": matka.tarkoitus,
           "Alkulukema": matka.alkulukema,
