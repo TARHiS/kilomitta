@@ -30,11 +30,11 @@ $.each(matkat, function (undefined, matka) {
 function calcDistance(coords1, coords2) {
   var R = 6371; // km
   var dLat = (coords2.latitude - coords1.latitude).toRad();
-  var dLon = (coords2.longitude - coords1.longitude).toRad(); 
+  var dLon = (coords2.longitude - coords1.longitude).toRad();
   var a = Math.sin(dLat / 2.0) * Math.sin(dLat / 2.0) +
-      Math.cos(coords1.latitude.toRad()) * Math.cos(coords2.latitude.toRad()) * 
-      Math.sin(dLon / 2.0) * Math.sin(dLon / 2.0); 
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
+      Math.cos(coords1.latitude.toRad()) * Math.cos(coords2.latitude.toRad()) *
+      Math.sin(dLon / 2.0) * Math.sin(dLon / 2.0);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var d = R * c;
   return d * 1000;
 }
@@ -59,7 +59,7 @@ $("#input-kilometri-lukema").blur(function(e) {
 
 // GPS lukemien päivitysfunktion. Kutsutaan aina kun GPS koordinaatit vaihtuu.
 updateLocation = function(p) {
-  if (p == null) {
+  if (p === null) {
     return;
   }
 
@@ -76,15 +76,20 @@ updateLocation = function(p) {
     pituus = calcDistance(matka.positions.last().coords, p.coords);
   }
 
+  // Tarkistetaan pituudeksi ei tule NaN
+  if(isNaN(pituus)) {
+    return;
+  }
+
   // Jos etäisyys edellisestä pisteestä on alle asetuksissa
   // säädetyn metrimäärän, ei tallenneta pistettä.
   if(pituus < option("min-movement")) {
     return;
   }
 
-  matka.pituus += pituus;  
+  matka.pituus += pituus;
 
-  // Määritetään etäisyydelle oikea yksikkö 
+  // Määritetään etäisyydelle oikea yksikkö
   if(matka.pituus < 1000) {
     $("#span-pituus").text(Math.round(matka.pituus) + "m");
   } else {
@@ -114,7 +119,7 @@ updateLocation = function(p) {
     p.coords.longitude
   );
 
-  if (gMark == null) {
+  if (gMark === null) {
     gMark = new google.maps.Circle({
       center: latLng,
       radius: p.coords.accuracy,
@@ -126,11 +131,13 @@ updateLocation = function(p) {
     gMark.setCenter(latLng);
     gMark.setRadius(p.coords.accuracy);
   }
-}
+};
 
-errorLocation = function(e) {
+errorLocation = function(error) {
+  alert('ERROR(' + error.code + '): ' + error.message +
+        '\nOtetaan paikannus pois päältä');
   navigator.geolocation.clearWatch(watchPosition);
-}
+};
 
 $("#input-kilometri-selite").autocomplete({
   source: selitteet,
@@ -163,9 +170,9 @@ $("#btn-valimatka").click(function() {
 
   var kmlkm = parseInt($("#input-kilometri-lukema").val());
 
-  if (!matka.valimatkat.isEmpty()
-      && matka.valimatkat.last().kmlkm > kmlkm
-      && matka.alkulukema > kmlkm) {
+  if (!matka.valimatkat.isEmpty() &&
+      matka.valimatkat.last().kmlkm > kmlkm &&
+      matka.alkulukema > kmlkm) {
     alert("Kilometri ei voi olla pienempi kuin edellinen lukema!");
     return;
   }
@@ -174,7 +181,7 @@ $("#btn-valimatka").click(function() {
     selite: $("#input-kilometri-selite").val(),
     kmlkm: kmlkm,
     lopetusaika: new Date(),
-  }
+  };
 
   appendValimatka(matka.valimatkat.length, valimatka);
 
@@ -184,7 +191,7 @@ $("#btn-valimatka").click(function() {
 
   $("#input-kilometri-selite").val("");
 
-  storage.set("matka", matka);  
+  storage.set("matka", matka);
 });
 
 $("#valimatkat tbody").on("click", "button", function(e) {
@@ -280,7 +287,7 @@ $("#matka-dialog").on("hide.bs.modal", function (e) {
         selite: "Lopetus",
         kmlkm: matka.loppulukema,
         lopetusaika: new Date(),
-      }
+      };
       matka.valimatkat.push(valimatka);
       matka.lopetusaika = valimatka.lopetusaika;
       matkat.push(matka);
@@ -305,7 +312,7 @@ $("#matka-dialog .modal-footer button.btn-default").click(function(e){
 });
 
 $("#btn-matka").click(function(e) {
-  $("#matka-dialog-loppulukema").val($("#input-kilometri-lukema").val())
+  $("#matka-dialog-loppulukema").val($("#input-kilometri-lukema").val());
   $("#matka-dialog-h3-paata").show();
   $("#matka-dialog").data("state", "end");
   $("#matka-dialog-save").text("Lopeta");
@@ -321,7 +328,7 @@ $("#btn-kilometri-plus, #btn-kilometri-miinus").click(function (e) {
 });
 
 $("#btn-keskita").click(function(){
-  if (gMark == null) {
+  if (gMark === null) {
     return;
   }
 
